@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>AccountId</fullName>
+        <default>false</default>
+        <label>AccountId</label>
+    </customValue>
+    <customValue>
+        <fullName>AccountNumber</fullName>
+        <default>false</default>
+        <label>AccountNumber</label>
+    </customValue>
+    <customValue>
+        <fullName>OwnerId</fullName>
+        <default>false</default>
+        <label>OwnerId</label>
+    </customValue>
+    <customValue>
+        <fullName>Salutation</fullName>
+        <default>false</default>
+        <label>Salutation</label>
+    </customValue>
+    <customValue>
+        <fullName>FirstName</fullName>
+        <default>false</default>
+        <label>FirstName</label>
+    </customValue>
+    <customValue>
+        <fullName>LastName</fullName>
+        <default>false</default>
+        <label>LastName</label>
+    </customValue>
+    <customValue>
+        <fullName>Name</fullName>
+        <default>false</default>
+        <label>Name</label>
+    </customValue>
+    <masterLabel>Field Change Fields</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

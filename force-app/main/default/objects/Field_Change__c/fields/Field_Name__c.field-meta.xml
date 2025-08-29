@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Field_Name__c</fullName>
+    <label>Field Name</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Object_Name__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetName>Field_Change_Fields</valueSetName>
+        <valueSettings>
+            <controllingFieldValue>Account</controllingFieldValue>
+            <valueName>AccountNumber</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Account</controllingFieldValue>
+            <controllingFieldValue>Contact</controllingFieldValue>
+            <valueName>OwnerId</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Account</controllingFieldValue>
+            <valueName>Name</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Contact</controllingFieldValue>
+            <valueName>AccountId</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Contact</controllingFieldValue>
+            <valueName>Salutation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Contact</controllingFieldValue>
+            <valueName>FirstName</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Contact</controllingFieldValue>
+            <valueName>LastName</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>
