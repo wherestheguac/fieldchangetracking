@@ -99,6 +99,11 @@
         <name>FlexiPage</name>
     </types>
     <types>
+        <members>Field_Change_Fields</members>
+        <members>Field_Change_Objects</members>
+        <name>GlobalValueSet</name>
+    </types>
+    <types>
         <members>Field_Change_Account_Relation__c-Field Change Account Relation Layout</members>
         <members>Field_Change_Contact_Relation__c-Field Change Contact Relation Layout</members>
         <members>Field_Change__c-Field Change Layout</members>
