@@ -7,6 +7,7 @@ private class NebulaLoggerWrapper_Test {
 
     @isTest
     static void testExceptionRethrowWhenNoLogger() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = null;
         try{
             NebulaLoggerWrapper.call(
@@ -22,50 +23,39 @@ private class NebulaLoggerWrapper_Test {
 
     @isTest
     static void testRunInfo() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = new CallableTestLogger();
-        NebulaLoggerWrapper.call(
-            NebulaLoggerWrapper.Method.RUN_INFO,
-            null,
-            null
-        );
+        NebulaLoggerWrapper.call(NebulaLoggerWrapper.Method.RUN_INFO);
         System.Assert.areEqual(NebulaLoggerWrapper.NEW_ENTRY, methodExecuted);
     }
 
     @isTest
     static void testRunError() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = new CallableTestLogger();
-        NebulaLoggerWrapper.call(
-            NebulaLoggerWrapper.Method.RUN_ERROR,
-            null,
-            null
-        );
+        NebulaLoggerWrapper.call(NebulaLoggerWrapper.Method.RUN_ERROR);
         System.Assert.areEqual(NebulaLoggerWrapper.NEW_ENTRY, methodExecuted);
     }
 
     @isTest
     static void testRunException() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = new CallableTestLogger();
-        NebulaLoggerWrapper.call(
-            NebulaLoggerWrapper.Method.RUN_EXCEPTION,
-            null,
-            null
-        );
+        NebulaLoggerWrapper.call(NebulaLoggerWrapper.Method.RUN_EXCEPTION);
         System.Assert.areEqual(NebulaLoggerWrapper.NEW_ENTRY, methodExecuted);
     }
 
     @isTest
     static void testRunSave() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = new CallableTestLogger();
-        NebulaLoggerWrapper.call(
-            NebulaLoggerWrapper.Method.RUN_SAVE,
-            null,
-            null
-        );
+        NebulaLoggerWrapper.call(NebulaLoggerWrapper.Method.RUN_SAVE);
         System.Assert.areEqual(NebulaLoggerWrapper.SAVE_LOG, methodExecuted);
     }
 
     @isTest
     static void testDataTypeString() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = new CallableTestLogger();
         NebulaLoggerWrapper.call(
             NebulaLoggerWrapper.Method.RUN_INFO,
@@ -77,6 +67,7 @@ private class NebulaLoggerWrapper_Test {
 
     @isTest
     static void testDataTypeException() {
+        TestUtility.ALLOW_LOGGING = true;
         NebulaLoggerWrapper.logger = new CallableTestLogger();
         NebulaLoggerWrapper.call(
             NebulaLoggerWrapper.Method.RUN_INFO,

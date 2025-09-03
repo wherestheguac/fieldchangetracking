@@ -18,8 +18,12 @@ public with sharing class NebulaLoggerWrapper {
     private static Type loggerType = Type.forName('Nebula', 'CallableLogger') ?? Type.forName('CallableLogger');
     @TestVisible private static Callable logger =  (Callable) loggerType?.newInstance();
     
+    public static void call(Method method) {
+        call(method, null, null);
+    }
+
     public static void call(Method method, DataType datatype, Object arg) {
-        if (logger != null) {
+        if (logger != null && (!Test.isRunningTest() || (Test.isRunningTest() && TestUtility.ALLOW_LOGGING))) {
             String methodName;
             Map<String,Object> args;
             if (datatype != null && arg != null) {
