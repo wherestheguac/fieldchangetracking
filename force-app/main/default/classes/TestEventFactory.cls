@@ -3,10 +3,7 @@ public class TestEventFactory {
     
     public static DataFactoryBundle createFieldChanges(Integer numEvents) {
         List<Field_Change_Tracking_Event__e> fieldChanges = new List<Field_Change_Tracking_Event__e>();
-        System.debug('before generics');
         List<SObject> changedRecords = TestDataFactory.createGenerics(numEvents, FieldChangeTestUtility.DEFAULT_OBJECT_NAME).generics;
-        System.debug('after generics');
-        system.debug(json.serializePretty(changedRecords));
         for (Integer i=0; i<numEvents; i++) {
             String index = i.toString();
             Field_Change_Tracking_Event__e event = (Field_Change_Tracking_Event__e)Field_Change_Tracking_Event__e.sObjectType.newSObject(null, true);
@@ -18,8 +15,6 @@ public class TestEventFactory {
             event.Old_Value__c = 'Old Value' + index;
             fieldChanges.add(event);
         }
-        System.debug('created field changes');
-        system.debug(json.serializePretty(fieldChanges));
         Map<String,Map<String,Object>> fieldChangeEventsUuidMap = new Map<String,Map<String,Object>>();
         fieldChangeEventsUuidMap.put(fieldChanges[0].eventUuid, fieldChanges[0].getPopulatedFieldsAsMap());
         return new DataFactoryBundle(fieldChanges, fieldChangeEventsUuidMap);
