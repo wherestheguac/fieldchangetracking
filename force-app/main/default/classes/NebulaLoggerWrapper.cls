@@ -1,51 +1,60 @@
 public with sharing class NebulaLoggerWrapper {
-    private static final String RUN_INFO = 'INFO';
-    private static final String RUN_ERROR = 'ERROR';
-    private static final String RUN_EXCEPTION = 'ERROR';
-    private static final String RUN_SAVE = 'SAVE';
     public Enum Method {RUN_INFO, RUN_ERROR, RUN_EXCEPTION, RUN_SAVE}
-    private static final String TYPE_STRING = 'message';
-    private static final String TYPE_ID = 'recordId';
-    private static final String TYPE_RECORD = 'record';
-    private static final String TYPE_LIST = 'recordList';
-    private static final String TYPE_MAP = 'recordMap';
-    private static final String TYPE_REQUEST_ID = 'requestId';
-    private static final String TYPE_EXCEPTION = 'exception';
-    public Enum DataType {TYPE_STRING, TYPE_ID, TYPE_RECORD, TYPE_LIST, TYPE_MAP, TYPE_REQUEST_ID, TYPE_EXCEPTION}
-    @TestVisible private static final String LOGGING_LEVEL_KEY = 'loggingLevel';
+    private static final Map<Method,String> LOGGING_LEVEL_MAP = new Map<Method,String> {
+        Method.RUN_INFO => 'INFO',
+        Method.RUN_ERROR => 'ERROR',
+        Method.RUN_EXCEPTION => 'ERROR',
+        Method.RUN_SAVE => 'INFO'
+    };
     @TestVisible private static final String NEW_ENTRY = 'newEntry';
     @TestVisible private static final String SAVE_LOG = 'saveLog';
+    private static final Map<Method,String> METHOD_NAME_MAP = new Map<Method,String> {
+        Method.RUN_INFO => NEW_ENTRY,
+        Method.RUN_ERROR => NEW_ENTRY,
+        Method.RUN_EXCEPTION => NEW_ENTRY,
+        Method.RUN_SAVE => SAVE_LOG
+    };
+    public Enum DataType {TYPE_ID, TYPE_RECORD, TYPE_LIST, TYPE_MAP, TYPE_REQUEST_ID, TYPE_EXCEPTION}
+    @TestVisible private static final Map<DataType,String> DATA_TYPE_MAP = new Map<DataType,String> {
+        DataType.TYPE_ID => 'recordId',
+        DataType.TYPE_RECORD => 'record',
+        DataType.TYPE_LIST => 'recordList',
+        DataType.TYPE_MAP => 'recordMap',
+        DataType.TYPE_REQUEST_ID => 'requestId',
+        DataType.TYPE_EXCEPTION => 'exception'
+    };
+    @TestVisible private static final String MESSAGE_KEY = 'message';
+    private static final String LOGGING_LEVEL_KEY = 'loggingLevel';
     private static Type loggerType = Type.forName('Nebula', 'CallableLogger') ?? Type.forName('CallableLogger');
     @TestVisible private static Callable logger =  (Callable) loggerType?.newInstance();
     
-    public static void call(Method method) {
-        call(method, null, null);
+    public static void log(Method methodName) {
+        log(methodName, null, null, null);
     }
 
-    public static void call(Method method, DataType datatype, Object arg) {
+    public static void log(Method methodName, String message) {
+        log(methodName, message, null, null);
+    }
+
+    public static void log(Method methodName, String message, DataType argtype, Object arg) {
         if (logger != null && (!Test.isRunningTest() || (Test.isRunningTest() && TestUtility.ALLOW_LOGGING))) {
-            String methodName;
-            Map<String,Object> args;
-            if (datatype != null && arg != null) {
-                args = new Map<String,Object>{
-                    datatype.name() => arg
-                };
-            }
-            switch on method {
-                when RUN_INFO,RUN_ERROR,RUN_EXCEPTION {
-                    methodName = NEW_ENTRY;
-                    args?.put(LOGGING_LEVEL_KEY, method.name());
-                }
-                when RUN_SAVE {
-                    methodName = SAVE_LOG;
+            Map<String,Object> args = new Map<String,Object>{
+                MESSAGE_KEY => message
+            };
+            if (methodName != Method.RUN_SAVE) {
+                args.put(LOGGING_LEVEL_KEY, LOGGING_LEVEL_MAP.get(methodName));
+                args.put(DATA_TYPE_MAP.get(argtype), arg);
+                if (methodName == Method.RUN_EXCEPTION) {
+                    args.put(SAVE_LOG, true);
                 }
             }
-            logger.call(methodName, args);
+            logger.call(METHOD_NAME_MAP.get(methodName), args);
+            if (methodName == Method.RUN_EXCEPTION) {
+                throw (Exception) arg;
+            }
         } else {
-            switch on method {
-                when RUN_EXCEPTION {
-                    throw (Exception) arg;
-                }
+            if (methodName == Method.RUN_EXCEPTION) {
+                throw (Exception) arg;
             }
         }
     }
