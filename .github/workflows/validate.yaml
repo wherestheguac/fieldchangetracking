@@ -1,16 +1,20 @@
-name: Validate pull request
+name: Validate Pull Request
 
 on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize]
+    types: [opened, synchronize, labeled, unlabeled]
     paths:
+      - '.github/**'
       - 'force-app/**'
+      - 'manifest/package.xml'
 
 jobs:
   validate-deployment:
+    if: contains(github.event.pull_request.labels.*.name, 'Run Tests')
     runs-on: ubuntu-latest
+    environment: DEV_HUB
     container:
       image: salesforce/cli:latest-slim
     steps:
@@ -19,10 +23,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Authenticate using SFDX_AUTH_URL'
+      - name: 'Authenticate With Dev Hub'
         run: |
-          echo ${{ secrets.SFDX_AUTH_URL }} | sf org login sfdx-url -s -u
+          echo ${{ secrets.SFDX_DEV_HUB_AUTH_URL }} | sf org login sfdx-url -d -u
 
-      - name: 'Validate'
+      - name: 'Create Scratch Org'
+        run: |
+          sf org create scratch --definition-file config/project-scratch-def.json --set-default --alias ciscratch
+
+      - name: 'Validate Deploy With Tests'
         run: |
           sf project deploy validate -d force-app/ -l RunLocalTests -w 30
+
+      - name: 'Delete Scratch Org'
+        run: |
+          sf org delete scratch -o ciscratch --no-prompt
+
+  ready-to-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jesusvasquez333/verify-pr-label-action@v1.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          valid-labels: 'Ready to Merge'
+          invalid-labels: 'In Progress, On Hold'
+          pull-request-number: '${{ github.event.pull_request.number }}'
+          disable-reviews: true
