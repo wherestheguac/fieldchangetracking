@@ -19,18 +19,19 @@ public class FieldChangeEventTriggerHandler extends TriggerHandler {
             }
             List<Database.SaveResult> results = Database.insert(fieldChanges, false);
             // check for issues saving the Field Change records and log any errors
+            List<Database.SaveResult> fcErrors = new List<Database.SaveResult>();
             for (Database.SaveResult sr : results) {
                 if (!sr.isSuccess()) {
-                    for(Database.Error err : sr.getErrors()) {
-                        String errorString = 'Error inserting sObjects of type: Field_Change__c, ' + err.getStatusCode() + ': ' + err.getMessage();
-                        if (!Test.isRunningTest()) {
-                            Logger.info('Relevant records', fieldChanges);
-                            Logger.error(errorString, sr);
-                        } else {
-                            throw new TestUtility.FailedTestingException(errorString);
-                        }
-                    }
+                    fcErrors.add(sr);
                 }
+            }
+            if (fcErrors.size() > 0) {
+                String errorString = 'Error inserting sObjects of type Field_Change__c';
+                NebulaLoggerWrapper.log(
+                    NebulaLoggerWrapper.Method.RUN_ERROR,
+                    errorString + ': ' + JSON.serializePretty(fcErrors)
+                );
+                throw new DmlException(errorString);
             }
             // Create relation records
             List<SObject> relations = new List<SObject>();
@@ -53,28 +54,27 @@ public class FieldChangeEventTriggerHandler extends TriggerHandler {
             }
             results = Database.insert(relations, false);
             // check for issues saving the Field Change Relation records and log any errors
+            List<Database.SaveResult> relErrors = new List<Database.SaveResult>();
             for (Database.SaveResult sr : results) {
                 if (!sr.isSuccess()) {
-                    for(Database.Error err : sr.getErrors()) {
-                        String errorString = 'Error inserting sObjects of type: Field_Change_*_Relation__c, ' + err.getStatusCode() + ': ' + err.getMessage();
-                        if (!Test.isRunningTest()) {
-                            Logger.error(errorString, sr);
-                        } else {
-                            throw new TestUtility.FailedTestingException(errorString);
-                        }
-                    }
+                    relErrors.add(sr);
                 }
             }
-            if (!Test.isRunningTest()) {
-                Logger.resumeSaving();
-                Logger.saveLog();
+            if (relErrors.size() > 0) {
+                String errorString = 'Error inserting sObjects of type Field_Change_*_Relation__c';
+                NebulaLoggerWrapper.log(
+                    NebulaLoggerWrapper.Method.RUN_ERROR,
+                    errorString + ': ' + JSON.serializePretty(relErrors)
+                );
+                throw new DmlException(errorString);
             }
         } catch(Exception e) {
-            if (!Test.isRunningTest()) {
-                Logger.exception('Exception in apex class: FieldChangeEventTriggerHandler', e);
-            } else {
-                throw e;
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: FieldChangeEventTriggerHandler.afterInsert',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
         }
     }
 }

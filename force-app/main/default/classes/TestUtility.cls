@@ -1,4 +1,5 @@
 public class TestUtility {
+    public static Boolean ALLOW_LOGGING = false;
     public static Boolean RUN_EVENT_TRIGGERS = true;
     public static Boolean RUN_OBJECT_TRIGGERS = true;
     public static Boolean EVENT_BUS_PUBLISH = true;
