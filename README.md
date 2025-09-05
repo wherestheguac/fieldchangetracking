@@ -8,6 +8,6 @@
     2. Field_Change__c.Object_Name__c
 2. Run ./scripts/shell/deleteWithManifest.sh
 
-# CURRENT DEPENDENCIES
+# CURRENT COMPATIBILITIES
 
 Nebula Logger: https://github.com/jongpie/NebulaLogger
