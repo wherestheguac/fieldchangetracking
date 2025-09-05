@@ -12,11 +12,12 @@ public class FieldChangePruningScheduler implements Schedulable {
             FieldChangePruningBatch b = new FieldChangePruningBatch(numOfDays);
             Database.executeBatch(b);
         } catch(Exception e) {
-            if (Test.isRunningTest()) {
-                throw e;
-            } else {
-                Logger.exception('Exception in apex class: FieldChangePruningScheduler.execute', e);
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: FieldChangePruningScheduler.execute',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
         }
     }
 }

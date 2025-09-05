@@ -12,7 +12,12 @@ public class AccountTriggerHandler extends TriggerHandler {
             this.newAccountMap = (Map<Id,Account>) Trigger.newMap;
             
         } catch(Exception e){
-            Logger.exception('Exception in apex class: AccountTriggerHandler.AccountTriggerHandler', e);
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: AccountTriggerHandler.AccountTriggerHandler',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
         }
     }
     
@@ -24,11 +29,19 @@ public class AccountTriggerHandler extends TriggerHandler {
             FieldChangeQueueable fieldTracking = new FieldChangeQueueable('Account', oldAccountMap, newAccountMap);
             Id jobId = System.enqueueJob(fieldTracking, 0);
             
-            if (!Test.isRunningTest()) {
-                Logger.info('FieldChangeQueueable enqueued in ContactTriggerHandler.beforeUpdate', jobId);
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_INFO,
+                'FieldChangeQueueable enqueued in ContactTriggerHandler.beforeUpdate',
+                NebulaLoggerWrapper.DataType.TYPE_ID,
+                jobId
+            );
         } catch(Exception e) {
-            Logger.exception('Exception in apex class: AccountTriggerHandler.beforeUpdate()', e);
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: AccountTriggerHandler.beforeUpdate',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
         }
     }
 }

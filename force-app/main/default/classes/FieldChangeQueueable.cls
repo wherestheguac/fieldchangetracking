@@ -58,31 +58,31 @@ public class FieldChangeQueueable implements Queueable {
                     if (!(Test.isRunningTest() && !TestUtility.EVENT_BUS_PUBLISH)) {
                         List<Database.SaveResult> results = EventBus.publish(fieldChangeEvents, callback);
                         // check for issues publishing the platform events and log any errors
+                        List<Database.SaveResult> fcErrors = new List<Database.SaveResult>();
                         for (Database.SaveResult sr : results) {
                             if (!sr.isSuccess()) {
-                                for(Database.Error err : sr.getErrors()) {
-                                    String errorString = 'Error publishing platform event of type: Field_Change_Tracking_Event__e, ' + err.getStatusCode() + ': ' + err.getMessage();
-                                    if (!Test.isRunningTest()) {
-                                        Logger.error(errorString, sr);
-                                    } else {
-                                        throw new TestUtility.FailedTestingException(errorString);
-                                    }
-                                }
+                                fcErrors.add(sr);
                             }
+                        }
+                        if (fcErrors.size() > 0) {
+                            String errorString = 'Error publishing platform event of type: Field_Change_Tracking_Event__e, ';
+                            NebulaLoggerWrapper.log(
+                                NebulaLoggerWrapper.Method.RUN_ERROR,
+                                errorString + ': ' + JSON.serializePretty(fcErrors)
+                            );
+                            throw new DmlException(errorString);
                         }
                     }
                 }
-                if (!Test.isRunningTest()) {
-                    Logger.resumeSaving();
-                    Logger.saveLog();
-                }
+                NebulaLoggerWrapper.log(NebulaLoggerWrapper.Method.RUN_SAVE);
             }
         } catch(Exception e) {
-            if (!Test.isRunningTest()) {
-                Logger.exception('Exception in apex class: FieldChangeQueueable.execute', e);
-            } else {
-                throw e;
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: FieldChangeQueueable.execute',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
         }
     }
 }
