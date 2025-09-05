@@ -29,17 +29,23 @@ public class FieldChangeEventCallback implements EventBus.EventPublishFailureCal
             }
             // Replace old uuid map
             uuidMap = newUuidMap;
-            if (!Test.isRunningTest()) {
-            	Logger.error('Retrying FieldChangeEvent Publish', fieldChangeEvents);
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_ERROR,
+                'Retrying FieldChangeEvent Publish',
+                NebulaLoggerWrapper.DataType.TYPE_LIST,
+                fieldChangeEvents
+            );
             EventBus.publish(fieldChangeEvents, this);
             retryCounter++;
         } else {
             if (Test.isRunningTest()) {
                 FieldChangeTestUtility.updateEventCallbackFailureGlobalVariables(retryCounter);
-            } else {
-            	Logger.error('FieldChangeEventFailureCallback.onFailure: Retry limit reached');
             }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_ERROR,
+                'FieldChangeEventFailureCallback.onFailure: Retry limit reached'
+            );
+            NebulaLoggerWrapper.log(NebulaLoggerWrapper.Method.RUN_SAVE);
         }
     }
     

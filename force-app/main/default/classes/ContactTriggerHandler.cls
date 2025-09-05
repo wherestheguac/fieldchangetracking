@@ -12,9 +12,13 @@ public class ContactTriggerHandler extends TriggerHandler {
             this.newContactMap = (Map<Id,Contact>) Trigger.newMap;
             
         } catch(Exception e) {
-            if (!Test.isRunningTest()) {
-            	Logger.exception('Exception in apex class: ContactTriggerHandler.ContactTriggerHandler', e);
-            } else {
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: ContactTriggerHandler.ContactTriggerHandler',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
+            if (Test.isRunningTest()) {
                 throw e;
             }
         }
@@ -29,13 +33,20 @@ public class ContactTriggerHandler extends TriggerHandler {
             FieldChangeQueueable fieldTracking = new FieldChangeQueueable('Contact', oldContactMap, newContactMap);
             Id jobId = System.enqueueJob(fieldTracking, 0);
             
-            if (!Test.isRunningTest()) {
-                Logger.info('FieldChangeQueueable enqueued in ContactTriggerHandler.beforeUpdate', jobId);
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_INFO,
+                'FieldChangeQueueable enqueued in ContactTriggerHandler.beforeUpdate',
+                NebulaLoggerWrapper.DataType.TYPE_ID,
+                jobId
+            );
         } catch(Exception e) {
-            if (!Test.isRunningTest()) {
-            	Logger.exception('Exception in apex class: ContactTriggerHandler.beforeUpdate', e);
-            } else {
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: ContactTriggerHandler.beforeUpdate',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
+            if (Test.isRunningTest()) {
                 throw e;
             }
         }

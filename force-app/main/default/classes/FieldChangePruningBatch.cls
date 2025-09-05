@@ -19,11 +19,12 @@ public class FieldChangePruningBatch implements Database.Batchable<sObject> {
             Database.delete(relations, false);
             Database.delete(scope, false);
         } catch(Exception e) {
-            if (Test.isRunningTest()) {
-                throw e;
-            } else {
-                Logger.exception('Exception in apex class: FieldChangePruningBatch.execute', e);
-            }
+            NebulaLoggerWrapper.log(
+                NebulaLoggerWrapper.Method.RUN_EXCEPTION,
+                'Exception in apex class: FieldChangePruningBatch.execute',
+                NebulaLoggerWrapper.DataType.TYPE_EXCEPTION,
+                e
+            );
         }
     }
 
