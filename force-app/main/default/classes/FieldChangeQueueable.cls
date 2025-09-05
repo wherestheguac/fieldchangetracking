@@ -8,18 +8,14 @@ public class FieldChangeQueueable implements Queueable {
         this.oldObjectMap = oldObjectMap;
         this.newObjectMap = newObjectMap;
         this.objectName = objectName;
-        if (Test.isRunningTest()) {
-            this.fieldChangeMetadata = FieldChangeTestUtility.TESTING_FIELD_CHANGE_METADATA;
-        } else {
-            List<Field_Change_Tracking__mdt> fieldChangeMetadataRecords = [
-                SELECT Field_Name__c
-                FROM Field_Change_Tracking__mdt
-                WHERE Object_Name__c = :this.objectName
-            ];
-            this.fieldChangeMetadata = new Set<String>();
-            for(Field_Change_Tracking__mdt metadata: fieldChangeMetadataRecords) {
-                this.fieldChangeMetadata.add(metadata.Field_Name__c);
-            }
+        List<Field_Change_Tracking__mdt> fieldChangeMetadataRecords = [
+            SELECT Field_Name__c
+            FROM Field_Change_Tracking__mdt
+            WHERE Object_Name__c = :this.objectName
+        ];
+        this.fieldChangeMetadata = new Set<String>();
+        for(Field_Change_Tracking__mdt metadata: fieldChangeMetadataRecords) {
+            this.fieldChangeMetadata.add(metadata.Field_Name__c);
         }
     }
     
