@@ -13,7 +13,7 @@ public class FieldChangePruningBatch implements Database.Batchable<sObject> {
         try {
             List<SObject> relations = new List<SObject>();
             String deleteQuery;
-            for (Field_Change_Relation_Tracking__mdt metadata : FieldChangeRelationUtility.RELATION_METADATA_MAP.values()) {
+            for (Field_Change_Relation_Tracking__mdt metadata : FieldChangeRelationMetadataUtility.RELATION_METADATA_MAP.values()) {
                 relations.addAll(Database.query(deleteQuery = 'SELECT Id FROM ' + metadata.Relation_Object_Name__c + ' WHERE Field_Change__c IN :scope'));
             }
             Database.delete(relations, false);

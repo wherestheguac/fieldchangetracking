@@ -36,21 +36,12 @@ public class FieldChangeEventTriggerHandler extends TriggerHandler {
             // Create relation records
             List<SObject> relations = new List<SObject>();
             for (Field_Change__c fieldChange : fieldChanges) {
-                if (Test.isRunningTest()) {
-                    relations.add(FieldChangeRelationUtility.createFieldChangeRelation(
-                        FieldChangeTestUtility.DEFAULT_RELATION_OBJECT_NAME,
-                        fieldChange.Id,
-                        FieldChangeTestUtility.DEFAULT_RELATION_FIELD_NAME,
-                        fieldChange.Changed_Record_Id__c
-                    ));
-                } else {
-                    relations.add(FieldChangeRelationUtility.createFieldChangeRelation(
-                        FieldChangeRelationUtility.RELATION_METADATA_MAP.get(fieldChange.Object_Name__c).Relation_Object_Name__c,
-                        fieldChange.Id,
-                        FieldChangeRelationUtility.RELATION_METADATA_MAP.get(fieldChange.Object_Name__c).Changed_Object_Lookup_Field_Name__c,
-                        fieldChange.Changed_Record_Id__c
-                    ));
-                }
+                relations.add(FieldChangeRelationMetadataUtility.createFieldChangeRelation(
+                    FieldChangeRelationMetadataUtility.RELATION_METADATA_MAP.get(fieldChange.Object_Name__c.toLowerCase()).Relation_Object_Name__c,
+                    fieldChange.Id,
+                    FieldChangeRelationMetadataUtility.RELATION_METADATA_MAP.get(fieldChange.Object_Name__c.toLowerCase()).Changed_Object_Lookup_Field_Name__c,
+                    fieldChange.Changed_Record_Id__c
+                ));
             }
             results = Database.insert(relations, false);
             // check for issues saving the Field Change Relation records and log any errors

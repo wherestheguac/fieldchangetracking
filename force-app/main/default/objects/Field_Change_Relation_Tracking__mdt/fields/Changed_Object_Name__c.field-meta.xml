@@ -4,7 +4,7 @@
     <caseSensitive>false</caseSensitive>
     <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
-    <label>Relation Lookup Field Name</label>
+    <label>Changed Object Name</label>
     <length>255</length>
     <required>true</required>
     <type>Text</type>
