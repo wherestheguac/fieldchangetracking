@@ -9,19 +9,21 @@
         <members>FieldChangeEventCallback_Test</members>
         <members>FieldChangeEventTriggerHandler</members>
         <members>FieldChangeEventTriggerHandler_Test</members>
+        <members>FieldChangeMetadataUtility</members>
         <members>FieldChangePruningBatch</members>
         <members>FieldChangePruningBatch_Test</members>
         <members>FieldChangePruningScheduler</members>
         <members>FieldChangePruningScheduler_Test</members>
         <members>FieldChangeQueueable</members>
         <members>FieldChangeQueueable_Test</members>
-        <members>FieldChangeRelationUtility</members>
+        <members>FieldChangeRelationMetadataUtility</members>
         <members>FieldChangeTestUtility</members>
         <members>NebulaLoggerWrapper</members>
         <members>NebulaLoggerWrapper_Test</members>
         <members>RecordCompareUtility</members>
         <members>TestDataFactory</members>
         <members>TestEventFactory</members>
+        <members>TestMetadataFactory</members>
         <members>TestUtility</members>
         <members>TriggerHandler</members>
         <members>TriggerHandler_Test</members>

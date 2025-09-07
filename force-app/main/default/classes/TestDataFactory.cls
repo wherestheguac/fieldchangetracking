@@ -61,7 +61,7 @@ public class TestDataFactory {
         for(Integer j=0; j<numFieldChanges; j++) {
             String index = j.toString();
             Field_Change__c fieldChange = fieldChanges[j];
-            relations.add(FieldChangeRelationUtility.createFieldChangeRelation(
+            relations.add(FieldChangeRelationMetadataUtility.createFieldChangeRelation(
                 FieldChangeTestUtility.DEFAULT_RELATION_OBJECT_NAME,
                 fieldChange.Id,
                 FieldChangeTestUtility.DEFAULT_RELATION_FIELD_NAME,

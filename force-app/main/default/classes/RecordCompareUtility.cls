@@ -13,7 +13,7 @@ public class RecordCompareUtility {
             if ((oldFieldValue != newFieldValue) ||
                 (oldFieldValue == null && newFieldValue != null) ||
                 (oldFieldValue != null && newFieldValue == null)) {
-                changedFieldNames.add(fieldName);
+                changedFieldNames.add(fieldName.toLowerCase());
             }
         }
         return changedFieldNames;
@@ -27,7 +27,7 @@ public class RecordCompareUtility {
         combinedFields.addAll(newObjMap.keySet());
         // compare old records to new records
         for (String fieldName: combinedFields) {
-            if (fieldNameRestriction.contains(fieldName.toString())) {
+            if (fieldNameRestriction.contains(fieldName.toString().toLowerCase())) {
                 Object oldFieldValue = oldObjMap.get(fieldName);
                 Object newFieldValue = newObjMap.get(fieldName);
                 if ((oldFieldValue == null && newFieldValue != null) ||

@@ -14,7 +14,9 @@ private class FieldChangeEventTriggerHandler_Test {
 
     @isTest
     static void testSingleEventPublish() {
+        TestMetadataFactory.createFieldChangeTrackingObjectsWithRelations();
         TestUtility.RUN_OBJECT_TRIGGERS = false;
+        TestMetadataFactory.DataFactoryBundle metadata = TestMetadataFactory.createFieldChangeTrackingObjectsWithRelations();
         List<Field_Change_Tracking_Event__e> events = TestEventFactory.createFieldChanges(1).fieldChanges;
 
         Test.startTest();
@@ -36,7 +38,9 @@ private class FieldChangeEventTriggerHandler_Test {
 
     @isTest
     static void testBulkEventPublish() {
+        TestMetadataFactory.createFieldChangeTrackingObjectsWithRelations();
         TestUtility.RUN_OBJECT_TRIGGERS = false;
+        TestMetadataFactory.DataFactoryBundle metadata = TestMetadataFactory.createFieldChangeTrackingObjectsWithRelations();
         List<Field_Change_Tracking_Event__e> events = TestEventFactory.createFieldChanges(BULK_AMOUNT).fieldChanges;
         
         Test.startTest();

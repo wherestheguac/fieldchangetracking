@@ -1,7 +1,4 @@
 public class FieldChangeTestUtility {
-    public static final Integer TESTING_ACCOUNT_FIELD_METADATA_COUNT = 2;
-    public static final Integer TESTING_CONTACT_FIELD_METADATA_COUNT = 2;
-    public static final Set<String> TESTING_FIELD_CHANGE_METADATA = new Set<String> {'FirstName','LastName','Name','AccountNumber'};
     public static final String EVENT_COUNT_CUSTOM_SETTING_NAME = 'Event Count';
     public static final String EVENT_UUID_CUSTOM_SETTING_NAME = 'Event Uuid';
     public static final String DEFAULT_OBJECT_NAME = 'Account';

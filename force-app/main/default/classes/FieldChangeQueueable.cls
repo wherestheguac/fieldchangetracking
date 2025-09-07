@@ -8,20 +8,14 @@ public class FieldChangeQueueable implements Queueable {
         this.oldObjectMap = oldObjectMap;
         this.newObjectMap = newObjectMap;
         this.objectName = objectName;
-        List<Field_Change_Tracking__mdt> fieldChangeMetadataRecords = [
-            SELECT Field_Name__c
-            FROM Field_Change_Tracking__mdt
-            WHERE Object_Name__c = :this.objectName
-        ];
-        this.fieldChangeMetadata = new Set<String>();
-        for(Field_Change_Tracking__mdt metadata: fieldChangeMetadataRecords) {
-            this.fieldChangeMetadata.add(metadata.Field_Name__c);
-        }
+        this.fieldChangeMetadata = FieldChangeMetadataUtility.OBJECT_METADATA_MAP.get(objectName.toLowerCase());
     }
     
     public void execute(QueueableContext context) {
         try {
-            if (!(Test.isRunningTest() && !TestUtility.EVENT_BUS_PUBLISH)) {
+            if ((Test.isRunningTest() && TestUtility.THROW_TESTING_EXCEPTION)) {
+                throw new TestUtility.GenericTestingException();
+            } else if (!(Test.isRunningTest() && !TestUtility.EVENT_BUS_PUBLISH)) {
                 List<Field_Change_Tracking_Event__e> fieldChangeEvents = new List<Field_Change_Tracking_Event__e>();
                 Map<String,Map<String,Object>> fieldChangeEventsUuidMap = new Map<String,Map<String,Object>>();
                 // identify changed fields
